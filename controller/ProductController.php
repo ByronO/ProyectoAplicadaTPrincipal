@@ -40,10 +40,8 @@ class ProductController
         $this->view->show('productView.php', null);
     }
 
-
     public function delete_updateView()
     {
-
         $product = new ProductModel();
 
         $data['products'] = $product->getProducts();
@@ -57,6 +55,21 @@ class ProductController
 
         $cant = $_POST['cant'];
         $this->view->show('buyView.php', $cant);
+    }
+
+    public function cartView()
+    {
+
+        $product = new ProductModel();
+        $data['products'] = $product->getProductCart($_SESSION['idUser']);
+
+        $total = 0;
+        foreach ($data['products'] as $pro){
+            $total += $pro['price'] * $pro['cant'];
+        }
+        $data['total'] = $total;
+
+        $this->view->show('cartView.php', $data);
     }
 
     //--------------------------------------------------------------------
@@ -145,9 +158,23 @@ class ProductController
 
         $product->addProductCart($name, $price, $image, $description, $cant, $provider, $_SESSION['idUser']);
 
-        return "hola";
     }
 
+    public function deleteProductCart()
+    {
+        $product = new ProductModel();
+        $id = $_POST['id'];
+
+        $vars['product'] = $product->getProduct($id);
+
+        $name = "";
+        foreach ($vars['product'] as $pro){
+            $name = $pro['name'];
+        }
+
+        $product->deleteProductCart($name, $_SESSION['idUser']);
+        echo "hola";
+    }
 
     public function code()
     {

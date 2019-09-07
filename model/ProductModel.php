@@ -84,6 +84,18 @@ QUE CORRESPONDE*/
         return $arr;
     }
 
+    public function getProductCart($id)
+    {
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
+
+        $sql = "SELECT * FROM  getProductCart($id)";
+
+        $result =  pg_query( $db, $sql );
+        $arr = pg_fetch_all($result);
+
+        return $arr;
+    }
+
     public function addProductCart($name, $price, $image, $description, $cant, $provider, $user)
     {
         $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
@@ -93,5 +105,17 @@ QUE CORRESPONDE*/
         $result =  pg_query( $db, $sql );
 
     }
+
+    public function deleteProductCart($name, $user)
+    {
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
+
+        $sql = "SELECT * FROM deleteProductCart('$name', $user)";
+
+        $result =  pg_query( $db, $sql );
+
+    }
+
+
 
 }

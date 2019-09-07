@@ -80,6 +80,27 @@ function addCart(id) {
     );
 }
 
+function deleteProductCart(id) {
+    var param = {
+        "id": id
+    };
+    alert(id)
+    $.ajax(
+        {
+            data: param,
+            url: '?controlador=Product&accion=deleteProductCart',
+            type: 'post',
+            beforeSend: function () {
+                alert("ad")
+                $("#mensaje").html("Procesando, \n\ espere por favor...");
+            },
+            success: function (response) {
+                $("#fila" + id).remove();
+
+            }
+        }
+    );
+}
 
 function confirmBuy() {
 

@@ -14,6 +14,18 @@ class UserController
     }
 
 
+    public function homeAdmin()
+    {
+        //llamar al modelo para traer datos
+
+        $product = new ProductModel();
+
+        $data['products'] = $product->getProducts();
+
+        $this->view->show('adminView.php', $data);
+    }
+
+
     public function sessionView()
     {
         $this->view->show('indexView.php', NULL);
@@ -57,17 +69,25 @@ class UserController
         $user = $_POST['user'];
         $pass = $_POST['pass'];
 
-        $result = $userModel->session($user, $pass);
-
-        if ($result[0]['verifyuser'] != 0) {
-
-            $_SESSION['idUser'] = $result[0]['verifyuser'];
+        if($user == 'admin' && $pass == 'admin123') {
             $data['products'] = $productModel->getProducts();
 
-            $this->view->show('userView.php', $data);
+            $this->view->show('adminView.php', $data);
 
-        } else {
-            $this->view->show('indexView.php', NULL);
+        }else{
+            $result = $userModel->session($user, $pass);
+
+            if ($result[0]['verifyuser'] != 0) {
+
+                $_SESSION['idUser'] = $result[0]['verifyuser'];
+                $data['products'] = $productModel->getProducts();
+
+                $this->view->show('userView.php', $data);
+
+            } else {
+                $this->view->show('indexView.php', NULL);
+
+            }
 
         }
 
