@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Audio World</title>
+    <title>ALL IN ONE</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -44,31 +44,31 @@ include_once 'public/navAdmin.php';
                         </thead>
                         <tbody>
                         <?php
-                        foreach ($vars['products'] as $articulos) { ?>
-                            <tr id="fila<?php echo $articulos[0]?>">
-                                    <td><img src="<?php echo $articulos[4] ?>" width="50" height="50"></td>
+                        foreach ($vars['products'] as $pro) { ?>
+                            <tr id="fila<?php echo $pro['id']?>">
+                                    <td><img src="<?php echo $pro['image'] ?>" width="50" height="50"></td>
 
-                                    <td><input id="<?php echo $articulos[0] ?>" name="<?php echo $articulos[1] ?>"
+                                    <td><input id="<?php echo $pro['id'] ?>" name="<?php echo $pro['id'] ?>"
                                                type="text"
                                                class="form-control"
-                                               style="width: 100%; cursor: auto;" value="<?php echo $articulos[1] ?> "
+                                               style="width: 100%; cursor: auto;" value="<?php echo $pro['name'] ?> "
                                         ></td>
-                                    <td><input id="<?php echo $articulos[0].$articulos[0] ?>" name="<?php echo $articulos[2] ?>"
+                                    <td><input id="<?php echo $pro['id'].$pro['id'] ?>" name="<?php echo $pro['price'] ?>"
                                                type="text"
                                                class="form-control"
-                                               style="width: 100% cursor: auto;" value="<?php echo $articulos[2] ?>"
+                                               style="width: 100% cursor: auto;" value="<?php echo $pro['price'] ?>"
                                         ></td>
-                                    <td><input id="<?php echo $articulos[0].$articulos[0].$articulos[0] ?>"
-                                               name="<?php echo $articulos[0].$articulos[0] ?>" type="text"
+                                    <td><input id="<?php echo $pro['id'].$pro['id'].$pro['id'] ?>"
+                                               name="<?php echo $pro['id'].$pro['id'] ?>" type="text"
                                                class="form-control"
-                                               style="width: 100%; cursor: auto;" value="<?php echo $articulos[3] ?>"
+                                               style="width: 100%; cursor: auto;" value="<?php echo $pro['description'] ?>"
                                         ></td>
                                     <td><input type="button" class="btn btn-warning" value="Actualizar articulo"
-                                               onclick="updateProduct(<?php echo $articulos[0] ?>, $('#<?php echo $articulos[0] ?>').val(),
-                                                       $('#<?php echo $articulos[0].$articulos[0] ?>').val(),$('#<?php echo $articulos[0].$articulos[0].$articulos[0] ?>').val());return false;">
+                                               onclick="updateProduct($('#<?php echo $pro['id'] ?>').val(),
+                                                       $('#<?php echo $pro['id'].$pro['id'] ?>').val(),$('#<?php echo $pro['id'].$pro['id'].$pro['id'] ?>').val());return false;">
 
                                     <td><input type="button" class="btn btn-danger" value="Eliminar articulo"
-                                               onclick="deleteProduct(<?php echo $articulos[0] ?>);return false;">
+                                               onclick="deleteProduct(<?php echo $pro['id'] ?>);return false;">
 
                             </tr>
                         <?php }

@@ -27,6 +27,13 @@ class ProductController
 
         $data['products'] = $product->getProducts();
 
+        $random = $product->getRandomSearch($_SESSION['idUser']);
+        if ($random != NULL) {
+            $data['suggestions'] = $product->getSuggestions($random[0]['search']);
+        } else {
+            $data['suggestions'] = null;
+        }
+
         $this->view->show('userView.php', $data);
     }
 
@@ -44,7 +51,7 @@ class ProductController
     {
         $product = new ProductModel();
 
-        $data['products'] = $product->getProducts();
+        $data['products'] = $product->getProductsPrincipal();
 
         $this->view->show('delete_updateView.php', $data);
 
@@ -64,12 +71,19 @@ class ProductController
         $data['products'] = $product->getProductCart($_SESSION['idUser']);
 
         $total = 0;
-        foreach ($data['products'] as $pro){
-            $total += $pro['price'] * $pro['cant'];
-        }
-        $data['total'] = $total;
+        if (!is_array($data['products'])) {
+            $this->home();
+            echo '<script> alert("Su carrito está vacio.")</script>';
+        } else {
+            foreach ($data['products'] as $pro) {
+                $total += $pro['price'] * $pro['cant'];
+            }
+            $data['total'] = $total;
 
-        $this->view->show('cartView.php', $data);
+            $this->view->show('cartView.php', $data);
+
+        }
+
     }
 
     //--------------------------------------------------------------------
@@ -88,10 +102,16 @@ class ProductController
 
         $path = 'public/imgs/p' . $n . '.jpg';
 
+        $result = $product->registerProduct($name, $price, $description, $path);
 
-        $product->registerProduct($name, $price, $description, $path);
+        if($result[0]['registerproduct'] == 1){
+            $this->view->show('registerProductView.php', null);
+            echo '<script> alert("Este producto ya existe.")</script>';
+        }else{
+            $this->view->show('registerProductView.php', null);
+        }
 
-        $this->view->show('registerProductView.php', null);
+
 
     }
 
@@ -101,7 +121,13 @@ class ProductController
 
         $id = $_POST['id'];
 
-        $product->deleteProduct($id);
+        $vars['product'] = $product->getProduct($id);
+        $name = "";
+        foreach ($vars['product'] as $pro) {
+            $name = $pro['name'];
+        }
+
+        $product->deleteProduct($name);
 
     }
 
@@ -111,12 +137,12 @@ class ProductController
 
         $product = new ProductModel();
 
-        $id = $_POST['id'];
         $name = $_POST['name'];
         $price = $_POST['price'];
         $description = $_POST['description'];
 
-        $product->updateProduct($id, $name, $price, $description);
+        $product->updateProduct($name, $price, $description);
+
 
     }
 
@@ -160,20 +186,26 @@ class ProductController
 
     }
 
+    public function confirmBuyCart()
+    {
+        $product = new ProductModel();
+
+
+        $product->confirmBuyCart($_SESSION['idUser']);
+
+        $this->home();
+        echo '<script> alert("Su compra se realizó correctamente.")</script>';
+
+    }
+
     public function deleteProductCart()
     {
         $product = new ProductModel();
         $id = $_POST['id'];
 
-        $vars['product'] = $product->getProduct($id);
+        $product->deleteProductCart($id, $_SESSION['idUser']);
 
-        $name = "";
-        foreach ($vars['product'] as $pro){
-            $name = $pro['name'];
-        }
-
-        $product->deleteProductCart($name, $_SESSION['idUser']);
-        echo "hola";
+        $this->cartView();
     }
 
     public function code()
@@ -201,6 +233,21 @@ class ProductController
 
 
         $this->view->show('codeView.php', $data);
+    }
+
+    public function searchProduct()
+    {
+
+        $productModel = new ProductModel();
+        $search = $_POST['search'];
+
+        $vars['search'] = $productModel->searchProduct($search);
+
+        if ($vars['search'] != NULL) {
+            $user = $_SESSION['idUser'];
+            $productModel->registerSearch($user, $search);
+        }
+        $this->view->show('searchView.php', $vars);
     }
 
 

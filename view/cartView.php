@@ -11,24 +11,25 @@ include_once 'public/navbar.php';
             <div class="col-sm-1"></div>
             <div id="contenido" class="container-fluid text-center table-responsive col-sm-10"
                  style="border:1px solid green;">
-                <form method="post" action="?controlador=Cliente&accion=cofirmarCompra">
-                    <table id="data_table" class="table table-striped container-fluid" style="width: 100%">
-                        <thead>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Nombre</th>
-                            <th>Precio</th>
-                            <th>Descripción</th>
-                            <th>Cantidad</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        foreach ($vars['products'] as $pro) {
-                            $id = $pro['id'] ?>
-                            <tr id="fila<?php echo $id?>" style="width: auto">
+
+                <table id="data_table" class="table table-striped container-fluid" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    foreach ($vars['products'] as $pro) {
+                        $id = $pro['id'] ?>
+                        <form method="post" action="?controlador=Product&accion=deleteProductCart">
+                            <tr id="fila<?php echo $id ?>" style="width: auto">
                                 <td><img src="<?php echo $pro['image'] ?>" width="50" height="50"></td>
-                                <td><input id="<?php echo $pro['id'] ?>" name="<?php echo $pro['id'] ?>"
+                                <td><input id="name" name="name"
                                            type="text" class="form-control"
                                            style="width: 100%; cursor: auto;"
                                            value="<?php echo $pro['name'] ?>" disabled></td>
@@ -41,14 +42,16 @@ include_once 'public/navbar.php';
                                 <td><input id="cant" name="cant" type="text" class="form-control"
                                            style="width: 100%; cursor: auto;" value="<?php echo $pro['cant'] ?> "
                                            disabled></td>
-                                <td><input type="button" class="btn btn-danger" value="Eliminar"
-                                           onclick="deleteProductCart(<?php echo $id?>);return false;"><td>
+                                <input type="hidden" name="id" id="id" value="<?php echo $pro['id'] ?>">
+                                <td><input type="submit" class="btn btn-danger" value="Eliminar">
+                                <td>
                             </tr>
-                        <?php }
-                        ?>
-                        </tbody>
-                    </table>
-                </form>
+                        </form>
+                    <?php }
+                    ?>
+                    </tbody>
+                </table>
+
 
                 <CENTER>
                     <div style="margin-top: 100px">
@@ -107,10 +110,9 @@ include_once 'public/navbar.php';
                     <input id="numeroS" name="numeroS" class="ccv form-control" type="text" placeholder="CVC"
                            maxlength="3"
                            onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
-
-                    <input type="button" class="btn btn-success" value="Confirmar Compra"
-                           onclick="confirmBuyCart();return false;">
-
+                    <form method="post" action="?controlador=Product&accion=confirmBuyCart">
+                        <input type="submit" class="btn btn-success" value="Confirmar Compra">
+                    </form>
 
                     <br><span id="mensajeC" style="color: red"></span>
                 </div>

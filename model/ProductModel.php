@@ -25,40 +25,51 @@ class ProductModel
 QUE CORRESPONDE*/
     public function registerProduct($name, $price, $description, $path)
     {
-        $consult = $this->db->prepare('call sp_registerProduct(?, ?, ?, ?)');
-        $consult->bindParam("1", $name, PDO::PARAM_STR, 50);
-        $consult->bindParam("2", $price, PDO::PARAM_INT, 5);
-        $consult->bindParam("3", $description, PDO::PARAM_STR, 200);
-        $consult->bindParam("4", $path, PDO::PARAM_STR, 200);
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
 
-        $consult->execute();
-        $consult->CloseCursor();
+        $sql = "SELECT * FROM  registerProduct('$name', $price, '$path', 1, '$description', 0)";
+
+        $result =  pg_query( $db, $sql );
+        $arr = pg_fetch_all($result);
+
+        return $arr;
 
     }
 
-    public function updateProduct($id, $name, $price, $description)
+    public function updateProduct($name, $price, $description)
     {
-        $consult = $this->db->prepare('call sp_updateProduct(?, ?, ?, ?)');
-        $consult->bindParam("1", $id, PDO::PARAM_INT, 5);
-        $consult->bindParam("2", $name, PDO::PARAM_STR, 50);
-        $consult->bindParam("3", $price, PDO::PARAM_INT, 5);
-        $consult->bindParam("4", $description, PDO::PARAM_STR, 200);
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
 
-        $consult->execute();
-        $consult->CloseCursor();
+        $sql = "SELECT * FROM  updateProduct('$name', $price, '$description', 0)";
+
+        $result =  pg_query( $db, $sql );
+        $arr = pg_fetch_all($result);
+
 
     }
 
-    public function deleteProduct($id)
+    public function deleteProduct($name)
     {
-        $consult = $this->db->prepare('call sp_deleteProduct(?)');
-        $consult->bindParam("1", $id, PDO::PARAM_INT, 5);
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
 
-        $consult->execute();
-        $consult->CloseCursor();
+        $sql = "SELECT * FROM  deleteProduct('$name', 0)";
+
+        $result =  pg_query( $db, $sql );
+        $arr = pg_fetch_all($result);
 
     }
 
+    public function getProductsPrincipal()
+    {
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
+
+        $sql = 'SELECT * FROM  getProducts(0)';
+
+        $result =  pg_query( $db, $sql );
+        $arr = pg_fetch_all($result);
+
+        return $arr;
+    }
 
     public function getProducts()
     {
@@ -106,16 +117,71 @@ QUE CORRESPONDE*/
 
     }
 
-    public function deleteProductCart($name, $user)
+    public function deleteProductCart($id, $user)
     {
         $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
 
-        $sql = "SELECT * FROM deleteProductCart('$name', $user)";
+        $sql = "SELECT * FROM deleteProductCart($id, $user)";
 
         $result =  pg_query( $db, $sql );
 
     }
 
+    public function confirmBuyCart($user)
+    {
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
 
+        $sql = "SELECT * FROM confirmBuyCart($user)";
+
+        $result =  pg_query( $db, $sql );
+
+    }
+
+    public function searchProduct($search)
+    {
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
+
+        $sql = "SELECT * FROM  searchProduct('$search')";
+
+        $result =  pg_query( $db, $sql );
+        $arr = pg_fetch_all($result);
+
+
+        return $arr;
+    }
+
+    public function registerSearch($user,$search){
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
+
+        $sql = "SELECT * FROM  registerSearch($user,'$search')";
+
+        pg_query( $db, $sql );
+    }
+
+    public function getRandomSearch($user){
+
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
+
+        $sql = "SELECT * FROM  getRandomSearch($user)";
+
+        $result =  pg_query( $db, $sql );
+        $arr = pg_fetch_all($result);
+
+
+        return $arr;
+    }
+
+    public function getSuggestions($search){
+
+        $db = pg_connect( "user=postgres password=1234 host=localhost dbname=Principal") or die( "Error al conectar: ".pg_last_error() );
+
+        $sql = "SELECT * FROM  getSuggestions('$search')";
+
+        $result =  pg_query( $db, $sql );
+        $arr = pg_fetch_all($result);
+
+
+        return $arr;
+    }
 
 }

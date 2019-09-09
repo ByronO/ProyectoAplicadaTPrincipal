@@ -1,6 +1,5 @@
-function updateProduct(id, name, price, description) {
+function updateProduct(name, price, description) {
     var param = {
-        "id": id,
         "name": name,
         "price": price,
         "description": description
@@ -63,7 +62,6 @@ function addCart(id) {
         "cant": ($("#cant").val())
     };
 
-    alert(($("#cant").val()))
     $.ajax(
         {
             data: param,
@@ -73,30 +71,7 @@ function addCart(id) {
 
             },
             success: function (response) {
-                alert(response)
                 alert("Producto añadido a su carrito de compras.")
-            }
-        }
-    );
-}
-
-function deleteProductCart(id) {
-    var param = {
-        "id": id
-    };
-    alert(id)
-    $.ajax(
-        {
-            data: param,
-            url: '?controlador=Product&accion=deleteProductCart',
-            type: 'post',
-            beforeSend: function () {
-                alert("ad")
-                $("#mensaje").html("Procesando, \n\ espere por favor...");
-            },
-            success: function (response) {
-                $("#fila" + id).remove();
-
             }
         }
     );

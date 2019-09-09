@@ -11,12 +11,12 @@ include_once 'public/navbar.php';
     <?php
     foreach ($_SESSION['product'] as $pro) {
         if($pro['provider'] == 0){
-            $pro['provider'] = 'NOMBRE DE LA TIENDA';
+            $pro['provider'] = 'ALL IN ONE STORE';
         } else if($pro['provider'] == 1){
             $pro['provider'] = 'Audio World';
         } else if($pro['provider'] == 2){
             $pro['provider'] = 'PC MANIA CR';
-        } else if($pro['provider'] == 1){
+        } else if($pro['provider'] == 3){
             $pro['provider'] = 'MoniStore';
         }
         ?>

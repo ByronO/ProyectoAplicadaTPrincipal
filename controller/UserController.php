@@ -82,8 +82,14 @@ class UserController
                 $_SESSION['idUser'] = $result[0]['verifyuser'];
                 $data['products'] = $productModel->getProducts();
 
-                $this->view->show('userView.php', $data);
+                $random = $productModel->getRandomSearch($_SESSION['idUser']);
+                if($random!=NULL){
+                    $data['suggestions'] = $productModel->getSuggestions($random[0]['search']);
+                }else{
+                    $data['suggestions']=null;
+                }
 
+                $this->view->show('userView.php', $data);
             } else {
                 $this->view->show('indexView.php', NULL);
 
